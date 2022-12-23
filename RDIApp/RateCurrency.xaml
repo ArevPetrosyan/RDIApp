@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"             
+             xmlns:svghelper="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms" 
+             x:Class="RDIApp.RateCurrency">
+    <StackLayout Spacing="0" BackgroundColor="White">
+        <Grid Margin="0, 0, 0, 0" HorizontalOptions="Fill" HeightRequest="50" BackgroundColor="Gray" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="65"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="65"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="1" Text="{Binding Title}" HorizontalOptions="CenterAndExpand" FontSize="25" VerticalOptions="Center" TextColor="White" />
+            <StackLayout Grid.Column="2" HeightRequest="50" WidthRequest="50" HorizontalOptions="End" Margin="0, 0, 10, 0">
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OpenSettings_Onclick" />
+                </StackLayout.GestureRecognizers>
+                <Image Source="settings.png" IsVisible="{Binding SettingsIsVisible}" HorizontalOptions="Fill" VerticalOptions="Fill"
+                         Aspect="AspectFit" HeightRequest="50" Margin="0, 0, 10, 0" />
+            </StackLayout>            
+       </Grid>
+
+        <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="Fill" IsVisible="{Binding SettingsIsVisible, Converter={StaticResource InvertedBoolConverter}}">
+            <Label Text="Не удалось получить курсы валют." VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" FontSize="25" />
+        </StackLayout>
+
+        <StackLayout Spacing="0" Orientation="Vertical" IsVisible="{Binding SettingsIsVisible}">
+            <RefreshView IsRefreshing="{Binding IsRefreshing}"  RefreshColor="Gray"
+                    Command="{Binding RefreshCommand}" >
+                <CollectionView ItemsSource="{Binding RateList}" Margin="0, 0, 0, 0">
+                    <CollectionView.Header>
+                        <Grid Margin="0, 0, 0, 10" BackgroundColor="#e6e6e6" HeightRequest="40">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition Width="200"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40"/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Column="1" Text="{Binding FirstDate}" HorizontalOptions="EndAndExpand" VerticalOptions="Center" FontSize="15" TextColor="Black" />
+                            <Label Grid.Column="2" Text="{Binding SecondDate}" HorizontalOptions="End" VerticalOptions="Center" FontSize="15" Margin="0,0,15,0" TextColor="Black" />
+                        </Grid>
+
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="10, 0, 0, 10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2.5*"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <StackLayout Grid.Row="0" Spacing="0" Orientation="Vertical" HorizontalOptions="Start">
+                                    <Label  Grid.Column="0" Margin="10, 0, 0, 0" Text="{Binding CharCode}" TextColor="Black" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="End"/>
+                                    <Label  Text="{Binding Description}" Margin="10, 0, 0, 0" TextColor="Gray" HorizontalOptions="Start" VerticalOptions="Start"/>
+                                </StackLayout>
+                                <Label Grid.Column="1" Text="{Binding FirstRate}" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Label Grid.Column="2" Text="{Binding SecondRate}" TextColor="Black" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>           
+        </StackLayout>
+    </StackLayout>
+</ContentPage>

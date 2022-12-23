@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:svghelper="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms" 
+             xmlns:vm="clr-namespace:RDIApp.ViewModels"
+             x:Class="RDIApp.Views.SettingsView">
+    <ContentPage.Content>
+        <StackLayout Spacing="0" BackgroundColor="White">
+            <Grid Margin="0, 0, 0, 0" HorizontalOptions="Fill" HeightRequest="50" BackgroundColor="Gray" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackLayout Grid.Column="0" HeightRequest="50" WidthRequest="50" HorizontalOptions="Start" Margin="10, 0, 0, 0">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="BackTapped" />
+                    </StackLayout.GestureRecognizers>
+                    <Image Source="back.png" IsVisible="{Binding SettingsIsVisible}" HorizontalOptions="Fill" VerticalOptions="Fill"
+                         Aspect="AspectFit" HeightRequest="50" Margin="0, 0, 10, 0" />
+                </StackLayout>
+                <Label Grid.Column="1" Text="Настройка валют" HorizontalOptions="CenterAndExpand" FontSize="25" VerticalOptions="Center" TextColor="White" />
+                <StackLayout Grid.Column="2" HeightRequest="50" WidthRequest="50" HorizontalOptions="End" Margin="0, 0, 10, 0">
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SaveChanges}" />
+                    </StackLayout.GestureRecognizers>
+                    <Image Source="done.png" IsVisible="{Binding SettingsIsVisible}" HorizontalOptions="Fill" VerticalOptions="Fill"
+                         Aspect="AspectFit" HeightRequest="50" Margin="0, 0, 10, 0" />
+                </StackLayout>
+            </Grid>
+
+            <StackLayout Spacing="0" Orientation="Vertical">
+                <StackLayout Orientation="Horizontal" BackgroundColor="#e6e6e6" Spacing="10" HeightRequest="40" />
+                <CollectionView x:Name="MyItems" IsGrouped="True" Margin="15, 0, 0, 0" ItemsSource="{Binding GroupedItems}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0, 0, 0, 10" x:DataType="vm:ItemViewModel" BackgroundColor="White">
+                                <Grid.GestureRecognizers>
+                                    <DropGestureRecognizer AllowDrop="True"
+                                           DragLeaveCommand="{Binding BindingContext.ItemDragLeave, Source={x:Reference MyItems}}" DragLeaveCommandParameter="{Binding}"
+                                           DragOverCommand="{Binding BindingContext.ItemDraggedOver, Source={x:Reference MyItems}}" DragOverCommandParameter="{Binding}"
+                                           Drop="DropGestureRecognizer_Drop_Collection" DropCommand="{Binding BindingContext.ItemDropped, Source={x:Reference MyItems}}"
+                                           DropCommandParameter="{Binding}" />
+                                    <!--<DragGestureRecognizer CanDrag="True"
+                                         DragStarting="DragGestureRecognizer_DragStarting_Collection"
+                                         DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MyItems}}"
+                                         DragStartingCommandParameter="{Binding}" />-->
+                                </Grid.GestureRecognizers>                                
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="65"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <StackLayout Grid.Row="0" Spacing="0" Orientation="Vertical" HorizontalOptions="Start">
+                                    <Label Text="{Binding CharCode}" TextColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}" FontAttributes="Bold" HorizontalOptions="Start" VerticalOptions="End" />
+                                    <Label Text="{Binding Description}" TextColor="{Binding IsBeingDragged, Converter={StaticResource DragColorConverter}}" HorizontalOptions="Start" VerticalOptions="Start" />
+                                </StackLayout>
+
+                                <Switch Grid.Column="1" HorizontalOptions="Center" IsToggled="{Binding IsActive, Mode=TwoWay}" />
+
+                                <StackLayout Grid.Column="2" HeightRequest="50" WidthRequest="50" HorizontalOptions="End" Margin="0, 0, 10, 0">
+                                    <Image Source="drop.png" HorizontalOptions="Fill" VerticalOptions="Fill"
+                                         Aspect="AspectFit" HeightRequest="50" Margin="0, 0, 10, 0" >
+                                        <Image.GestureRecognizers>
+                                            <DragGestureRecognizer CanDrag="True"
+                                         DragStarting="DragGestureRecognizer_DragStarting_Collection"
+                                         DragStartingCommand="{Binding BindingContext.ItemDragged, Source={x:Reference MyItems}}"
+                                         DragStartingCommandParameter="{Binding}" />
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </StackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
